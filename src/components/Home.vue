@@ -44,7 +44,6 @@
         </table>
       </div>
     </div><!-- row -->
-
   </div>
 </template>
 
