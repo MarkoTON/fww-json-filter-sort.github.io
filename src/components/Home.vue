@@ -44,17 +44,6 @@
         </table>
       </div>
     </div><!-- row -->
-
-    <div class="row">
-      <div class="col">
-        <!-- <div v-for="(countryFilter,index) in country" :key="index">
-          <div v-for="(item) in countryFilter.users" :key="item.id">
-              {{item.fullName}}
-          </div>
-        </div> -->
-      </div><!-- col -->
-    </div><!-- row -->
-    <!-- {{stateUsers}} -->
   </div>
 </template>
 
