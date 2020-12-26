@@ -7,12 +7,12 @@
         <div class="d-flex">
           <input type="text" class="form-control mr-1" v-model="searchName" placeholder="Name exp: Allyson">
           <input type="text" class="form-control mr-1" v-model="searchBalance" placeholder="Balance exp: 2,972.88">
-          <select class="form-control mr-1" v-model="isActive" @change="statusOfUser">
+          <select class="form-control mr-1" v-model="isActive" >
             <option v-bind:value="'all'">Bouth</option>
             <option v-bind:value="true" selected>Active</option>
             <option v-bind:value="false">Not Active</option>
           </select>
-          <input type="text" class="form-control mr-1" v-model="searchState" placeholder="Reg. exp: 2014-02-22T12:35:59">
+          <input type="text" class="form-control mr-1" v-model="searchDate" placeholder="Reg. exp: 2014-02-22T12:35:59">
           <input type="text" class="form-control mr-1" v-model="searchState" placeholder="State exp: Colorado">
           <input type="text" class="form-control" v-model="searchCountry" placeholder="State exp: Cyprus">
         </div>
@@ -44,6 +44,7 @@
         </table>
       </div>
     </div><!-- row -->
+
   </div>
 </template>
 
@@ -62,17 +63,22 @@ export default {
       searchBalance:'',
       searchState:'',
       searchCountry:'',
-      isActive: true,
+      isActive: 'all',
+      searchDate:'',
       pickValue:null
     }
   },
   computed: {
+    rows() {
+      return this.stateUsers.length
+    },
     filteredUser(){
       var pickSearch = this.searchOption();
 
       if(pickSearch.option == 'fullName'){
+        console.log(pickSearch.name.toLowerCase());
         return this.stateUsers.filter((name) => {
-          return name.fullName.match(pickSearch.name)
+          return name.fullName.toLowerCase().match(pickSearch.name)
         });
       } else if(pickSearch.option == 'balance'){
         return this.stateUsers.filter((name) => {
@@ -80,14 +86,17 @@ export default {
         });
       } else if(pickSearch.option == 'state'){
         return this.stateUsers.filter((name) => {
-          return name.name.match(pickSearch.name)
+          return name.name.toLowerCase().match(pickSearch.name)
         });
       } else if(pickSearch.option == 'country'){
         return this.stateUsers.filter((name) => {
-          return name.country.match(pickSearch.name)
+          return name.country.toLowerCase().match(pickSearch.name)
+        });
+      } else if(pickSearch.option == 'registered'){
+        return this.stateUsers.filter((name) => {
+          return name.registered.match(pickSearch.name)
         });
       } else if(pickSearch.option == 'isActive'){
-        console.log(pickSearch.name);
         if(pickSearch.name == 'all'){
           return this.stateUsers.filter((name) => {
             return name
@@ -101,10 +110,6 @@ export default {
     }
   },
   methods:{
-    statusOfUser(){
-      console.log(this.isActive);
-      
-    },
     sortingJSON(){
       this.info.forEach(element => {
           for(let i = 0; i < element.state.length; i++){
@@ -126,7 +131,6 @@ export default {
           this.stateUsers.push(nirvana)
         }
       });
-      // console.log(this.stateUsers)
     },
     getData() {
       return axios.get('https://fww-demo.herokuapp.com/').then(response => (this.info = response.data))
@@ -134,7 +138,7 @@ export default {
     searchOption(){
       if(this.searchName != ''){
         return {
-          name: this.searchName,
+          name: this.searchName.toLowerCase(),
           option: 'fullName'
         };
       } else if(this.searchBalance != ''){
@@ -144,36 +148,31 @@ export default {
         };
       } else if(this.searchState != ''){
         return {
-          name: this.searchState,
+          name: this.searchState.toLowerCase(),
           option: 'state'
         };
       } else if(this.searchCountry != ''){
         return {
-          name: this.searchCountry,
+          name: this.searchCountry.toLowerCase(),
           option: 'country'
+        };
+      } else if(this.searchDate != ''){
+        return {
+          name: this.searchDate,
+          option: 'registered'
         };
       } else if(this.isActive == 'all' || this.isActive == true || this.isActive == false){
         return {
           name: this.isActive,
           option: 'isActive'
         };
-      } 
-      // else {
-      //   return {
-      //     name: this.searchName,
-      //     option: 'fullName'
-      //   };
-      // }
+      }
     }
   },
   created () {
     this.getData().then((result) => {
       this.sortingJSON()
     })
-  },
-  beforeCreate() {
-  },
-  beforeMount(){
   }
 }
 </script>
