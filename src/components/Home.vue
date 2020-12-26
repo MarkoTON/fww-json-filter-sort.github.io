@@ -8,7 +8,7 @@
           <input type="text" class="form-control mr-1" v-model="searchName" placeholder="Name exp: Allyson">
           <input type="text" class="form-control mr-1" v-model="searchBalance" placeholder="Balance exp: 2,972.88">
           <select class="form-control mr-1" v-model="isActive" >
-            <option v-bind:value="'all'">Bouth</option>
+            <option v-bind:value="'all'">Both</option>
             <option v-bind:value="true" selected>Active</option>
             <option v-bind:value="false">Not Active</option>
           </select>
