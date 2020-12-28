@@ -2,19 +2,18 @@
   <div class="container">
     <div class="row">
       <h1 class="text-center border-bottom">FACTORY WORLD WIDE</h1>
-
       <div class="col-12 mb-2">
         <div class="d-flex">
-          <input type="text" class="form-control mr-1" v-model="searchName" placeholder="Name exp: Allyson">
-          <input type="text" class="form-control mr-1" v-model="searchBalance" placeholder="Balance exp: 2,972.88">
-          <select class="form-control mr-1" v-model="isActive" >
+          <input type="text" class="form-control mr-1 filterName" v-model="searchName" placeholder="Name exp: Allyson">
+          <input type="text" class="form-control mr-1 filterBalance" v-model="searchBalance" placeholder="Balance exp: 2,972.88">
+          <select class="form-control mr-1 selectStatus" v-model="isActive" >
             <option v-bind:value="'all'">Both</option>
-            <option v-bind:value="true" selected>Active</option>
+            <option v-bind:value="true">Active</option>
             <option v-bind:value="false">Not Active</option>
           </select>
-          <input type="text" class="form-control mr-1" v-model="searchDate" placeholder="Reg. exp: 2014-02-22T12:35:59">
-          <input type="text" class="form-control mr-1" v-model="searchState" placeholder="State exp: Colorado">
-          <input type="text" class="form-control" v-model="searchCountry" placeholder="State exp: Cyprus">
+          <input type="text" class="form-control mr-1 filterDate" v-model="searchDate" placeholder="Reg. exp: 2014-02-22T12:35:59">
+          <input type="text" class="form-control mr-1 filterState" v-model="searchState" placeholder="State exp: Colorado">
+          <input type="text" class="form-control filterCountry" v-model="searchCountry" placeholder="State exp: Cyprus">
         </div>
       </div>
       <div class="col-12">
@@ -64,18 +63,63 @@ export default {
       searchCountry:'',
       isActive: 'all',
       searchDate:'',
-      pickValue:null
+      pickValue:null,
+      searchOptionsClasses:['filterName', 'filterBalance', 'selectStatus', 'filterDate', 'filterState', 'filterCountry']
     }
   },
+  watch : {
+    // searchName:function(val) {
+    //   this.searchBalance = '';
+    //   this.isActive = 'all';
+    //   this.searchDate = '';
+    //   this.searchState = '';
+    //   this.searchCountry = '';
+    // },
+    // searchBalance:function(val) {
+    //   this.searchName = '';
+    //   this.isActive = 'all';
+    //   this.searchDate = '';
+    //   this.searchState = '';
+    //   this.searchCountry = '';
+    // },
+    // isActive:function(val) {
+    //   this.searchName = '';
+    //   this.searchBalance = '';
+    //   this.searchDate = '';
+    //   this.searchState = '';
+    //   this.searchCountry = '';
+    // },
+    // searchDate:function(val) {
+    //   this.searchName = '';
+    //   this.isActive = 'all';
+    //   this.searchBalance = '';
+    //   this.searchState = '';
+    //   this.searchCountry = '';
+    // },
+    // searchState:function(val) {
+    //   this.searchName = '';
+    //   this.isActive = 'all';
+    //   this.searchDate = '';
+    //   this.searchBalance = '';
+    //   this.searchCountry = '';
+    // },
+    // searchCountry:function(val) {
+    //   this.searchName = '';
+    //   this.isActive = 'all';
+    //   this.searchDate = '';
+    //   this.searchState = '';
+    //   this.searchBalance = '';
+    // }
+  },
   computed: {
-    rows() {
-      return this.stateUsers.length
-    },
+    // rows() {
+    //   return this.stateUsers.length
+    // },
     filteredUser(){
       var pickSearch = this.searchOption();
 
       if(pickSearch.option == 'fullName'){
-        console.log(pickSearch.name.toLowerCase());
+        // console.log(pickSearch.name.toLowerCase());
         return this.stateUsers.filter((name) => {
           return name.fullName.toLowerCase().match(pickSearch.name)
         });
@@ -109,6 +153,7 @@ export default {
     }
   },
   methods:{
+    // Here JSON is filter and sorted in one array of Objects that is easier to loop over
     sortingJSON(){
       this.info.forEach(element => {
           for(let i = 0; i < element.state.length; i++){
@@ -130,8 +175,10 @@ export default {
           this.stateUsers.push(nirvana)
         }
       });
+      console.log(this.stateUsers);
     },
     getData() {
+      // Geting data from API - FWW
       return axios.get('https://fww-demo.herokuapp.com/').then(response => (this.info = response.data))
     },
     searchOption(){
@@ -166,6 +213,20 @@ export default {
           option: 'isActive'
         };
       }
+    },
+    reset(e){
+      // console.log("Nirvana and Metallica");
+      // console.log(e.target.classList);
+      // this.searchOptionsClasses.forEach(element => {
+      //   console.log(element)
+      //   if(e.target.classList.contains(element)){
+      //     console.log(true);
+      //     // e.target.classList.add("disabled")
+      //   } else {
+      //     console.log(false);
+      //     e.target.classList.add("disabled")
+      //   }
+      // });
     }
   },
   created () {
