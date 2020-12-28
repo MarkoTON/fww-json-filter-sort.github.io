@@ -5,6 +5,7 @@
       <div class="col-12 mb-2">
         <div class="d-flex">
           <input type="text" class="form-control mr-1 filterName" v-model="searchName" placeholder="Name exp: Allyson">
+          
           <input type="text" class="form-control mr-1 filterBalance" v-model="searchBalance" placeholder="Balance exp: 2,972.88">
           <select class="form-control mr-1 selectStatus" v-model="isActive" >
             <option v-bind:value="'all'">Both</option>
@@ -21,7 +22,7 @@
           <thead class="thead-dark">
             <tr>
               <th scope="col">#</th>
-              <th scope="col">Full Name</th>
+              <th scope="col" @click="sortByName">Full Name <i class="fas fa-sort-alpha-up"></i></th>
               <th scope="col">Balance</th>
               <th scope="col">Active</th>
               <th scope="col">Registered</th>
@@ -64,7 +65,8 @@ export default {
       isActive: 'all',
       searchDate:'',
       pickValue:null,
-      searchOptionsClasses:['filterName', 'filterBalance', 'selectStatus', 'filterDate', 'filterState', 'filterCountry']
+      searchOptionsClasses:['filterName', 'filterBalance', 'selectStatus', 'filterDate', 'filterState', 'filterCountry'],
+      sortOrder: false
     }
   },
   watch : {
@@ -227,6 +229,28 @@ export default {
       //     e.target.classList.add("disabled")
       //   }
       // });
+    },
+    sortByName(){
+      var order = this.sortOrder;
+      this.sortOrder = !this.sortOrder;
+      this.stateUsers.sort(function (a, b) {
+        var nameA = a.fullName.toUpperCase(); // ignore upper and lowercase
+        var nameB = b.fullName.toUpperCase(); // ignore upper and lowercase
+        if(order){
+          if (nameA < nameB) {
+            return -1;
+          } else {
+            return 1
+          }
+        } else {
+          if (nameA < nameB) {
+            return 1;
+          } else {
+            return -1
+          }
+        }
+        return 0;
+      });
     }
   },
   created () {
