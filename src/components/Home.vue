@@ -4,16 +4,16 @@
       <h1 class="text-center border-bottom">FACTORY WORLD WIDE</h1>
       <div class="col-12 mb-2">
         <div class="d-flex">
-          <input type="text" @keyup="resetInput" class="form-control mr-1 filterName" v-model="searchName" placeholder="Name exp: Allyson">
-          <input type="text" @keyup="resetInput" class="form-control mr-1 filterBalance" v-model="searchBalance" placeholder="Balance exp: 2,972.88">
-          <select @keyup="resetInput" class="form-control mr-1 selectStatus" v-model="isActive" >
+          <input type="text" class="form-control mr-1 filterName" v-model="searchName" placeholder="Name exp: Allyson">
+          <input type="text" class="form-control mr-1 filterBalance" v-model="searchBalance" placeholder="Balance exp: 2,972.88">
+          <select class="form-control mr-1 selectStatus" v-model="isActive" >
             <option v-bind:value="'all'">Both</option>
             <option v-bind:value="true">Active</option>
             <option v-bind:value="false">Not Active</option>
           </select>
-          <input type="text" @keyup="resetInput" class="form-control mr-1 filterDate" v-model="searchDate" placeholder="Reg. exp: 2014-02-22T12:35:59">
-          <input type="text" @keyup="resetInput" class="form-control mr-1 filterState" v-model="searchState" placeholder="State exp: Colorado">
-          <input type="text" @keyup="resetInput" class="form-control filterCountry" v-model="searchCountry" placeholder="State exp: Cyprus">
+          <input type="date" class="form-control mr-1 filterDate" v-model="searchDate" placeholder="Reg. exp: 2014-02-22T12:35:59">
+          <input type="text" class="form-control mr-1 filterState" v-model="searchState" placeholder="State exp: Colorado">
+          <input type="text" class="form-control filterCountry" v-model="searchCountry" placeholder="State exp: Cyprus">
         </div>
       </div>
       <div class="col-12">
@@ -21,16 +21,16 @@
           <thead class="thead-dark">
             <tr>
               <th scope="col">#</th>
-              <th scope="col" @click="sortByName">Full Name <i class="fas fa-sort-alpha-up"></i></th>
-              <th scope="col">Balance <i class="fas fa-sort-amount-up"></i></th>
-              <th scope="col">Active</th>
-              <th scope="col">Registered <i class="fas fa-sort-numeric-up"></i></th>
-              <th scope="col">State <i class="fas fa-sort-alpha-up"></i></th>
-              <th scope="col">Country <i class="fas fa-sort-alpha-up"></i></th>
+              <th scope="col" @click="sortByName">Full Name <i class="fas" :class="{'fa-sort-alpha-down' : !sortOrderName,'fa-sort-alpha-up': sortOrderName }"></i></th>
+              <th scope="col" @click="sortByBalance" >Balance <i class="fas " :class="{'fa-sort-amount-down' : !sortOrderBalance,'fa-sort-amount-up': sortOrderBalance }"></i></th>
+              <th scope="col" @click="sortByActive">Active <i class="fas " :class="{'fa-toggle-on' : !sortOrderActive,'fa-toggle-off': sortOrderActive }"></i></th>
+              <th scope="col" @click="sortByDate">Registered <i class="fas " :class="{'fa-sort-numeric-up' : !sortOrderDate,'fa-sort-numeric-down': sortOrderDate }"></i></th>
+              <th scope="col" @click="sortByState">State <i class="fas " :class="{'fa-sort-alpha-down' : !sortOrderState,'fa-sort-alpha-up': sortOrderState }"></i></th>
+              <th scope="col" @click="sortByCountry">Country <i class="fas " :class="{'fa-sort-alpha-down' : !sortOrderCountry,'fa-sort-alpha-up': sortOrderCountry }"></i></th>
             </tr>
           </thead>
           <tbody>
-            <tr v-for="(item,index) in filteredUser" :key="item.id">
+            <tr @click="allInfo(item)" v-for="(item,index) in filteredUser" :key="item.id">
               <th scope="row">{{index+1}}</th>
               <td>{{item.fullName}}</td>
               <td>{{item.balance}}</td>
@@ -56,23 +56,18 @@ export default {
       info:null,
       countryState:[],
       stateUsers:[],
-      extUserData:[],
       searchName:'',
       searchBalance:'',
       searchState:'',
       searchCountry:'',
       isActive: 'all',
       searchDate:'',
-      pickValue:null,
-      searchOptionsClasses:[
-        {dataName: 'searchName', class: 'filterName'}, 
-        {dataName: 'searchBalance', class: 'filterBalance'}, 
-        {dataName: 'isActive', class: 'selectStatus'}, 
-        {dataName: 'searchDate', class: 'filterDate'}, 
-        {dataName: 'searchState', class: 'filterState'}, 
-        {dataName: 'searchCountry', class: 'filterCountry'}
-      ],
-      sortOrder: false
+      sortOrderName: null,
+      sortOrderBalance: null,
+      sortOrderState: null,
+      sortOrderCountry: null,
+      sortOrderActive: null,
+      sortOrderDate: null
     }
   },
   watch : {
@@ -120,9 +115,6 @@ export default {
     }
   },
   computed: {
-    // rows() {
-    //   return this.stateUsers.length
-    // },
     filteredUser(){
       var pickSearch = this.searchOption();
 
@@ -165,10 +157,10 @@ export default {
     sortingJSON(){
       this.info.forEach(element => {
           for(let i = 0; i < element.state.length; i++){
-            let metallica = element.state[i];
-            metallica.country = element.country;
+            let users = element.state[i];
+            users.country = element.country;
             // Add all country is one array
-            this.countryState.push(metallica);
+            this.countryState.push(users);
           }
       });
       // Reset all users
@@ -176,11 +168,13 @@ export default {
 
       this.countryState.forEach(element =>{
         for(let i = 0; i < element.users.length;i++){
-          let nirvana = element.users[i]
-          nirvana.name = element.name;
-          nirvana.country = element.country;
+          var fixTime = element.users[i].registered.replace("T"," ")
+          let user = element.users[i]
+          user.name = element.name;
+          user.country = element.country;
+          user.registered = fixTime;
           // Add all users in one array
-          this.stateUsers.push(nirvana)
+          this.stateUsers.push(user)
         }
       });
     },
@@ -222,11 +216,11 @@ export default {
       }
     },
     sortByName(){
-      var order = this.sortOrder;
-      this.sortOrder = !this.sortOrder;
+      var order = !this.sortOrderName;
+      this.sortOrderName = !this.sortOrderName;
       this.stateUsers.sort(function (a, b) {
-        var nameA = a.fullName.toUpperCase(); // ignore upper and lowercase
-        var nameB = b.fullName.toUpperCase(); // ignore upper and lowercase
+        var nameA = a.fullName.toUpperCase(); 
+        var nameB = b.fullName.toUpperCase(); 
         if(order){
           if (nameA < nameB) {
             return -1;
@@ -243,28 +237,89 @@ export default {
         return 0;
       });
     },
-    resetInput(e){
-      let i = [
-        {dataName: this.searchName, class: 'filterName'}, 
-        {dataName: this.searchBalance, class: 'filterBalance'}, 
-        {dataName: this.isActive, class: 'selectStatus'}, 
-        {dataName: this.searchDate, class: 'filterDate'}, 
-        {dataName: this.searchState, class: 'filterState'}, 
-        {dataName: this.searchCountry, class: 'filterCountry'}
-      ]
-      this.searchOptionsClasses.forEach(element => {
-        if(!e.target.classList.contains(element.class)){
-          i.forEach(el => {
-            if(element.class == el.class){
-              console.log(true);
-              console.log(element.class);
-              console.log(el.class);
-              console.log(el.dataName);
-              // el.dataName = ''
-            }
-          });
+    sortByBalance(){
+      var order = !this.sortOrderBalance;
+      this.sortOrderBalance = !this.sortOrderBalance;
+      this.stateUsers.sort(function (a, b) {
+        var balanceA = parseFloat(a.balance.substring(1).replace(",","").replace(".",""))
+        var balanceB = parseFloat(b.balance.substring(1).replace(",","").replace(".",""))
+        if(order){
+          return balanceA - balanceB
+        } else {
+          return balanceB - balanceA
         }
       });
+    },
+    sortByActive(){
+      var order = !this.sortOrderActive;
+      this.sortOrderActive = !this.sortOrderActive;
+      this.stateUsers.sort(function(x, y) {
+        if(order){
+          return (x.isActive === y.isActive) ? 0 : x.isActive ? 1 : -1;
+        } else {
+          return (x.isActive === y.isActive) ? 0 : x.isActive ? -1 : 1;
+        }
+      });
+    },
+    sortByState(){
+      var order = !this.sortOrderState;
+      this.sortOrderState = !this.sortOrderState;
+      this.stateUsers.sort(function (a, b) {
+        var stateA = a.name.toUpperCase(); 
+        var stateB = b.name.toUpperCase(); 
+        if(order){
+          if (stateA < stateB) {
+            return -1;
+          } else {
+            return 1
+          }
+        } else {
+          if (stateA < stateB) {
+            return 1;
+          } else {
+            return -1
+          }
+        }
+        return 0;
+      });
+    },
+    sortByCountry(){
+      var order = !this.sortOrderCountry;
+      this.sortOrderCountry = !this.sortOrderCountry;
+      this.stateUsers.sort(function (a, b) {
+        var countryA = a.country.toUpperCase(); 
+        var countryB = b.country.toUpperCase(); 
+        if(order){
+          if (countryA < countryB) {
+            return -1;
+          } else {
+            return 1
+          }
+        } else {
+          if (countryA < countryB) {
+            return 1;
+          } else {
+            return -1
+          }
+        }
+        return 0;
+      });
+    },
+    sortByDate(){
+      var order = !this.sortOrderDate;
+      this.sortOrderDate = !this.sortOrderDate;
+      this.stateUsers.sort(function (a, b) {
+        var registeredA = a.registered; 
+        var registeredB = b.registered; 
+        if(order){
+          return new Date(registeredB) - new Date(registeredA);
+        } else {
+          return new Date(registeredA) - new Date(registeredB);
+        }
+      });
+    },
+    allInfo(item){
+      console.log(item);
     }
   },
   created () {
