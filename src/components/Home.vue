@@ -45,7 +45,7 @@
             </tr>
           </thead>
           <tbody>
-            <tr v-for="(item,index) in filteredUser" :key="item.id">
+            <router-link tag="tr" :to="{name: 'User', params: {user_id: item.id , stateUsers: stateUsers } }" @click="userInfo(item)" v-for="(item,index) in filteredUser" :key="item.id">
               <th scope="row">{{ indexShowInTable + index +1}}</th>
               <td>{{item.fullName}}</td>
               <td>{{item.balance}}</td>
@@ -53,7 +53,7 @@
               <td>{{item.registered}}</td>
               <td>{{item.name}}</td>
               <td>{{item.country}}</td>
-            </tr>
+            </router-link>
           </tbody>
         </table>
       </div><!-- col-12 -->
@@ -355,6 +355,9 @@ export default {
       if (this.visibleTodos.length == 0 && this.currentPage > 0) {
         this.updatePage(this.currentPage -1);
       }
+    },
+    userInfo(user){
+      console.log(user);
     }
   },
   created () {
