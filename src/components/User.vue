@@ -28,7 +28,6 @@
 import axios from 'axios'
 
 export default {
-  props:['stateUsers'],
   name: 'user',
   data () {
     return {
