@@ -3,6 +3,21 @@
     <div class="row">
       <h1 class="text-center border-bottom">FACTORY WORLD WIDE</h1>
       <div class="col-12 mb-2">
+        <div class="d-flex align-items-center justify-content-center m-3 lead">
+          <div class="mr-2">
+            <select class="form-control mr-1 selectStatus" v-model="pageSize" @click="updateVisibleTodos" >
+              <option v-bind:value="50">50 per page</option>
+              <option v-bind:value="100">100 per page</option>
+              <option v-bind:value="200">200 per page</option>
+              <option v-bind:value="500">500 per page</option>
+            </select>
+          </div>
+          <Pagination 
+              v-bind:stateUsers="stateUsers"
+              v-on:page-update="updatePage"
+              v-bind:currentPage="currentPage"
+              v-bind:pageSize="pageSize" />
+        </div>
         <div class="d-flex">
           <input type="text" class="form-control mr-1 filterName" v-model="searchName" placeholder="Name exp: Allyson">
           <input type="text" class="form-control mr-1 filterBalance" v-model="searchBalance" placeholder="Balance exp: 2,972.88">
@@ -31,7 +46,7 @@
           </thead>
           <tbody>
             <tr @click="allInfo(item)" v-for="(item,index) in filteredUser" :key="item.id">
-              <th scope="row">{{index+1}}</th>
+              <th scope="row">{{ indexShowInTable + index +1}}</th>
               <td>{{item.fullName}}</td>
               <td>{{item.balance}}</td>
               <td>{{item.isActive}}</td>
@@ -48,6 +63,7 @@
 
 <script>
 import axios from 'axios';
+import Pagination from './Pagination.vue'
 
 export default {
   name: 'Home',
@@ -67,8 +83,15 @@ export default {
       sortOrderState: null,
       sortOrderCountry: null,
       sortOrderActive: null,
-      sortOrderDate: null
+      sortOrderDate: null,
+      currentPage: 0,
+      pageSize: 200,
+      visibleTodos: [],
+      indexShowInTable:0
     }
+  },
+  components:{
+    Pagination
   },
   watch : {
     searchName:function(val) {
@@ -120,32 +143,32 @@ export default {
 
       if(pickSearch.option == 'fullName'){
         // console.log(pickSearch.name.toLowerCase());
-        return this.stateUsers.filter((name) => {
+        return this.visibleTodos.filter((name) => {
           return name.fullName.toLowerCase().match(pickSearch.name)
         });
       } else if(pickSearch.option == 'balance'){
-        return this.stateUsers.filter((name) => {
+        return this.visibleTodos.filter((name) => {
           return name.balance.match(pickSearch.name)
         });
       } else if(pickSearch.option == 'state'){
-        return this.stateUsers.filter((name) => {
+        return this.visibleTodos.filter((name) => {
           return name.name.toLowerCase().match(pickSearch.name)
         });
       } else if(pickSearch.option == 'country'){
-        return this.stateUsers.filter((name) => {
+        return this.visibleTodos.filter((name) => {
           return name.country.toLowerCase().match(pickSearch.name)
         });
       } else if(pickSearch.option == 'registered'){
-        return this.stateUsers.filter((name) => {
+        return this.visibleTodos.filter((name) => {
           return name.registered.match(pickSearch.name)
         });
       } else if(pickSearch.option == 'isActive'){
         if(pickSearch.name == 'all'){
-          return this.stateUsers.filter((name) => {
+          return this.visibleTodos.filter((name) => {
             return name
           });
         } else {
-          return this.stateUsers.filter((name) => {
+          return this.visibleTodos.filter((name) => {
             return name.isActive == pickSearch.name
           });
         }
@@ -177,6 +200,9 @@ export default {
           this.stateUsers.push(user)
         }
       });
+      
+      this.updateVisibleTodos();
+
     },
     getData() {
       // Geting data from API - FWW
@@ -218,7 +244,7 @@ export default {
     sortByName(){
       var order = !this.sortOrderName;
       this.sortOrderName = !this.sortOrderName;
-      this.stateUsers.sort(function (a, b) {
+      this.visibleTodos.sort(function (a, b) {
         var nameA = a.fullName.toUpperCase(); 
         var nameB = b.fullName.toUpperCase(); 
         if(order){
@@ -240,7 +266,7 @@ export default {
     sortByBalance(){
       var order = !this.sortOrderBalance;
       this.sortOrderBalance = !this.sortOrderBalance;
-      this.stateUsers.sort(function (a, b) {
+      this.visibleTodos.sort(function (a, b) {
         var balanceA = parseFloat(a.balance.substring(1).replace(",","").replace(".",""))
         var balanceB = parseFloat(b.balance.substring(1).replace(",","").replace(".",""))
         if(order){
@@ -253,7 +279,7 @@ export default {
     sortByActive(){
       var order = !this.sortOrderActive;
       this.sortOrderActive = !this.sortOrderActive;
-      this.stateUsers.sort(function(x, y) {
+      this.visibleTodos.sort(function(x, y) {
         if(order){
           return (x.isActive === y.isActive) ? 0 : x.isActive ? 1 : -1;
         } else {
@@ -264,7 +290,7 @@ export default {
     sortByState(){
       var order = !this.sortOrderState;
       this.sortOrderState = !this.sortOrderState;
-      this.stateUsers.sort(function (a, b) {
+      this.visibleTodos.sort(function (a, b) {
         var stateA = a.name.toUpperCase(); 
         var stateB = b.name.toUpperCase(); 
         if(order){
@@ -286,7 +312,7 @@ export default {
     sortByCountry(){
       var order = !this.sortOrderCountry;
       this.sortOrderCountry = !this.sortOrderCountry;
-      this.stateUsers.sort(function (a, b) {
+      this.visibleTodos.sort(function (a, b) {
         var countryA = a.country.toUpperCase(); 
         var countryB = b.country.toUpperCase(); 
         if(order){
@@ -308,7 +334,7 @@ export default {
     sortByDate(){
       var order = !this.sortOrderDate;
       this.sortOrderDate = !this.sortOrderDate;
-      this.stateUsers.sort(function (a, b) {
+      this.visibleTodos.sort(function (a, b) {
         var registeredA = a.registered; 
         var registeredB = b.registered; 
         if(order){
@@ -320,6 +346,18 @@ export default {
     },
     allInfo(item){
       console.log(item);
+    },
+    updatePage(pageNumber) {
+      this.currentPage = pageNumber;
+      this.updateVisibleTodos();
+    },
+    updateVisibleTodos() {
+      this.visibleTodos = this.stateUsers.slice(this.currentPage * this.pageSize, (this.currentPage * this.pageSize) + this.pageSize);
+
+      // if we have 0 visible todos, go back a page
+      if (this.visibleTodos.length == 0 && this.currentPage > 0) {
+        this.updatePage(this.currentPage -1);
+      }
     }
   },
   created () {
