@@ -1,36 +1,35 @@
 <template>
   <div class="container">
+    <div class="d-flex align-items-center justify-content-end m-3 lead">
+      <h1 class="text-center border-bottom mr-auto">FACTORY WORLD WIDE</h1>
+      <div class="mr-2">
+        <select class="form-control mr-1 selectStatus" v-model="pageSize" @click="updateVisibleTodos" >
+          <option v-bind:value="50">50 per page</option>
+          <option v-bind:value="100">100 per page</option>
+          <option v-bind:value="200">200 per page</option>
+          <option v-bind:value="500">500 per page</option>
+        </select>
+      </div><!-- mr-2 -->
+      <Pagination 
+          v-bind:stateUsers="stateUsers"
+          v-on:page-update="updatePage"
+          v-bind:currentPage="currentPage"
+          v-bind:pageSize="pageSize" />
+    </div><!-- d-flex align-items-center justify-content-end m-3 lead -->
+    <div class="d-flex mb-2">
+      <input type="text" class="form-control mr-1 filterName" v-model="searchName" placeholder="Name exp: Allyson">
+      <input type="text" class="form-control mr-1 filterBalance" v-model="searchBalance" placeholder="Balance exp: 2,972.88">
+      <select class="form-control mr-1 selectStatus" v-model="isActive" >
+        <option v-bind:value="'all'">Both</option>
+        <option v-bind:value="true">Active</option>
+        <option v-bind:value="false">Not Active</option>
+      </select>
+      <input type="date" class="form-control mr-1 filterDate" v-model="searchDate" placeholder="Reg. exp: 2014-02-22T12:35:59">
+      <input type="text" class="form-control mr-1 filterState" v-model="searchState" placeholder="State exp: Colorado">
+      <input type="text" class="form-control filterCountry" v-model="searchCountry" placeholder="State exp: Cyprus">
+    </div><!-- d-flex -->
+    
     <div class="row">
-      <h1 class="text-center border-bottom">FACTORY WORLD WIDE</h1>
-      <div class="col-12 mb-2">
-        <div class="d-flex align-items-center justify-content-center m-3 lead">
-          <div class="mr-2">
-            <select class="form-control mr-1 selectStatus" v-model="pageSize" @click="updateVisibleTodos" >
-              <option v-bind:value="50">50 per page</option>
-              <option v-bind:value="100">100 per page</option>
-              <option v-bind:value="200">200 per page</option>
-              <option v-bind:value="500">500 per page</option>
-            </select>
-          </div>
-          <Pagination 
-              v-bind:stateUsers="stateUsers"
-              v-on:page-update="updatePage"
-              v-bind:currentPage="currentPage"
-              v-bind:pageSize="pageSize" />
-        </div>
-        <div class="d-flex">
-          <input type="text" class="form-control mr-1 filterName" v-model="searchName" placeholder="Name exp: Allyson">
-          <input type="text" class="form-control mr-1 filterBalance" v-model="searchBalance" placeholder="Balance exp: 2,972.88">
-          <select class="form-control mr-1 selectStatus" v-model="isActive" >
-            <option v-bind:value="'all'">Both</option>
-            <option v-bind:value="true">Active</option>
-            <option v-bind:value="false">Not Active</option>
-          </select>
-          <input type="date" class="form-control mr-1 filterDate" v-model="searchDate" placeholder="Reg. exp: 2014-02-22T12:35:59">
-          <input type="text" class="form-control mr-1 filterState" v-model="searchState" placeholder="State exp: Colorado">
-          <input type="text" class="form-control filterCountry" v-model="searchCountry" placeholder="State exp: Cyprus">
-        </div>
-      </div>
       <div class="col-12">
         <table class="table">
           <thead class="thead-dark">
@@ -45,7 +44,7 @@
             </tr>
           </thead>
           <tbody>
-            <tr @click="allInfo(item)" v-for="(item,index) in filteredUser" :key="item.id">
+            <tr v-for="(item,index) in filteredUser" :key="item.id">
               <th scope="row">{{ indexShowInTable + index +1}}</th>
               <td>{{item.fullName}}</td>
               <td>{{item.balance}}</td>
@@ -56,7 +55,7 @@
             </tr>
           </tbody>
         </table>
-      </div>
+      </div><!-- col-12 -->
     </div><!-- row -->
   </div>
 </template>
@@ -343,9 +342,6 @@ export default {
           return new Date(registeredA) - new Date(registeredB);
         }
       });
-    },
-    allInfo(item){
-      console.log(item);
     },
     updatePage(pageNumber) {
       this.currentPage = pageNumber;
