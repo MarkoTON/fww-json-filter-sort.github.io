@@ -1,5 +1,5 @@
 <template>
-  <div class="container">
+  <div class="container" id="home">
     <div class="d-flex align-items-center justify-content-end m-3 lead">
       <h1 class="text-center border-bottom mr-auto">FACTORY WORLD WIDE</h1>
       <div class="mr-2">
@@ -58,6 +58,8 @@
         </table>
       </div><!-- col-12 -->
     </div><!-- row -->
+    <!-- Back to top of page -->
+    <a href="#home" id="toTop" v-smooth-scroll><i class="fas fa-arrow-alt-circle-up fa-4x"></i></a>
   </div>
 </template>
 
@@ -370,5 +372,9 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-
+a#toTop {
+  position: fixed;
+  bottom: 5vh;
+  right: 20vw;
+}
 </style>

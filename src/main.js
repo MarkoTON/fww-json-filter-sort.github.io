@@ -7,6 +7,9 @@ import { BootstrapVue, IconsPlugin } from 'bootstrap-vue'
 import { library } from '@fortawesome/fontawesome-svg-core'
 import { faUserSecret } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
+import VueSmoothScroll from 'vue2-smooth-scroll'
+
+Vue.use(VueSmoothScroll)
 
 library.add(faUserSecret)
 
