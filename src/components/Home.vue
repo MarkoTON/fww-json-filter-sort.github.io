@@ -3,7 +3,7 @@
     <div class="d-flex align-items-center justify-content-end m-3 lead">
       <h1 class="text-center border-bottom mr-auto">FACTORY WORLD WIDE</h1>
       <div class="mr-2">
-        <select class="form-control mr-1 selectStatus" v-model="pageSize" @click="updateVisibleTodos" >
+        <select class="form-control mr-1 selectStatus clickable" v-model="pageSize" @click="updateVisibleTodos" >
           <option v-bind:value="50">50 per page</option>
           <option v-bind:value="100">100 per page</option>
           <option v-bind:value="200">200 per page</option>
@@ -36,16 +36,16 @@
           <thead class="thead-dark">
             <tr>
               <th scope="col">#</th>
-              <th scope="col" @click="sortByName">Full Name <i class="fas" :class="{'fa-sort-alpha-down' : !sortOrderName,'fa-sort-alpha-up': sortOrderName }"></i></th>
-              <th scope="col" @click="sortByBalance" >Balance <i class="fas " :class="{'fa-sort-amount-down' : !sortOrderBalance,'fa-sort-amount-up': sortOrderBalance }"></i></th>
-              <th scope="col" @click="sortByActive">Active <i class="fas " :class="{'fa-toggle-on' : !sortOrderActive,'fa-toggle-off': sortOrderActive }"></i></th>
-              <th scope="col" @click="sortByDate">Registered <i class="fas " :class="{'fa-sort-numeric-up' : !sortOrderDate,'fa-sort-numeric-down': sortOrderDate }"></i></th>
-              <th scope="col" @click="sortByState">State <i class="fas " :class="{'fa-sort-alpha-down' : !sortOrderState,'fa-sort-alpha-up': sortOrderState }"></i></th>
-              <th scope="col" @click="sortByCountry">Country <i class="fas " :class="{'fa-sort-alpha-down' : !sortOrderCountry,'fa-sort-alpha-up': sortOrderCountry }"></i></th>
+              <th scope="col" class="clickable" @click="sortByName">Full Name <i class=" fas" :class="{'fa-sort-alpha-down' : !sortOrderName,'fa-sort-alpha-up': sortOrderName }"></i></th>
+              <th scope="col" class="clickable" @click="sortByBalance" >Balance <i class=" fas " :class="{'fa-sort-amount-down' : !sortOrderBalance,'fa-sort-amount-up': sortOrderBalance }"></i></th>
+              <th scope="col" class="clickable" @click="sortByActive">Active <i class=" fas " :class="{'fa-toggle-on' : !sortOrderActive,'fa-toggle-off': sortOrderActive }"></i></th>
+              <th scope="col" class="clickable" @click="sortByDate">Registered <i class=" fas " :class="{'fa-sort-numeric-up' : !sortOrderDate,'fa-sort-numeric-down': sortOrderDate }"></i></th>
+              <th scope="col" class="clickable" @click="sortByState">State <i class=" fas " :class="{'fa-sort-alpha-down' : !sortOrderState,'fa-sort-alpha-up': sortOrderState }"></i></th>
+              <th scope="col" class="clickable" @click="sortByCountry">Country <i class=" fas " :class="{'fa-sort-alpha-down' : !sortOrderCountry,'fa-sort-alpha-up': sortOrderCountry }"></i></th>
             </tr>
           </thead>
           <tbody>
-            <router-link tag="tr" :to="{name: 'User', params: {user_id: item.id , stateUsers: stateUsers } }" @click="userInfo(item)" v-for="(item,index) in filteredUser" :key="item.id">
+            <router-link class="clickable" tag="tr" :to="{name: 'User', params: {user_id: item.id , stateUsers: stateUsers } }" @click="userInfo(item)" v-for="(item,index) in filteredUser" :key="item.id">
               <th scope="row">{{ indexShowInTable + index +1}}</th>
               <td>{{item.fullName}}</td>
               <td>{{item.balance}}</td>
@@ -376,5 +376,8 @@ a#toTop {
   position: fixed;
   bottom: 5vh;
   right: 20vw;
+}
+.clickable {
+  cursor: pointer;
 }
 </style>
