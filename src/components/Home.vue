@@ -1,7 +1,7 @@
 <template>
   <div class="container" id="home">
     <div class="d-flex align-items-center justify-content-end m-3 lead">
-      <h1 class="text-center border-bottom mr-auto">FACTORY WORLD WIDE</h1>
+      <h1 class="text-center border-bottom mr-auto">Handling JSON</h1>
       <div class="mr-2">
         <select class="form-control mr-1 selectStatus clickable" v-model="pageSize" @click="updateVisibleTodos" >
           <option v-bind:value="50">50 per page</option>
