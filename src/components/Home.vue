@@ -3,7 +3,7 @@
     <div class="d-flex align-items-center justify-content-end m-3 lead">
       <h1 class="text-center border-bottom mr-auto">Handling JSON</h1>
       <div class="mr-2">
-        <select class="form-control mr-1 selectStatus clickable" v-model="pageSize" @click="updateVisibleTodos" >
+        <select class="form-control mr-1 selectStatus clickable" v-model="pageSize" @click="updateVisibleUsers" >
           <option v-bind:value="50">50 per page</option>
           <option v-bind:value="100">100 per page</option>
           <option v-bind:value="200">200 per page</option>
@@ -88,7 +88,7 @@ export default {
       sortOrderDate: null,
       currentPage: 0,
       pageSize: 200,
-      visibleTodos: [],
+      visibleUsers: [],
       indexShowInTable:0
     }
   },
@@ -145,32 +145,32 @@ export default {
 
       if(pickSearch.option == 'fullName'){
         // console.log(pickSearch.name.toLowerCase());
-        return this.visibleTodos.filter((name) => {
+        return this.visibleUsers.filter((name) => {
           return name.fullName.toLowerCase().match(pickSearch.name)
         });
       } else if(pickSearch.option == 'balance'){
-        return this.visibleTodos.filter((name) => {
+        return this.visibleUsers.filter((name) => {
           return name.balance.match(pickSearch.name)
         });
       } else if(pickSearch.option == 'state'){
-        return this.visibleTodos.filter((name) => {
+        return this.visibleUsers.filter((name) => {
           return name.name.toLowerCase().match(pickSearch.name)
         });
       } else if(pickSearch.option == 'country'){
-        return this.visibleTodos.filter((name) => {
+        return this.visibleUsers.filter((name) => {
           return name.country.toLowerCase().match(pickSearch.name)
         });
       } else if(pickSearch.option == 'registered'){
-        return this.visibleTodos.filter((name) => {
+        return this.visibleUsers.filter((name) => {
           return name.registered.match(pickSearch.name)
         });
       } else if(pickSearch.option == 'isActive'){
         if(pickSearch.name == 'all'){
-          return this.visibleTodos.filter((name) => {
+          return this.visibleUsers.filter((name) => {
             return name
           });
         } else {
-          return this.visibleTodos.filter((name) => {
+          return this.visibleUsers.filter((name) => {
             return name.isActive == pickSearch.name
           });
         }
@@ -203,7 +203,7 @@ export default {
         }
       });
       
-      this.updateVisibleTodos();
+      this.updateVisibleUsers();
 
     },
     getData() {
@@ -246,7 +246,7 @@ export default {
     sortByName(){
       var order = !this.sortOrderName;
       this.sortOrderName = !this.sortOrderName;
-      this.visibleTodos.sort(function (a, b) {
+      this.visibleUsers.sort(function (a, b) {
         var nameA = a.fullName.toUpperCase(); 
         var nameB = b.fullName.toUpperCase(); 
         if(order){
@@ -268,7 +268,7 @@ export default {
     sortByBalance(){
       var order = !this.sortOrderBalance;
       this.sortOrderBalance = !this.sortOrderBalance;
-      this.visibleTodos.sort(function (a, b) {
+      this.visibleUsers.sort(function (a, b) {
         var balanceA = parseFloat(a.balance.substring(1).replace(",","").replace(".",""))
         var balanceB = parseFloat(b.balance.substring(1).replace(",","").replace(".",""))
         if(order){
@@ -281,7 +281,7 @@ export default {
     sortByActive(){
       var order = !this.sortOrderActive;
       this.sortOrderActive = !this.sortOrderActive;
-      this.visibleTodos.sort(function(x, y) {
+      this.visibleUsers.sort(function(x, y) {
         if(order){
           return (x.isActive === y.isActive) ? 0 : x.isActive ? 1 : -1;
         } else {
@@ -292,7 +292,7 @@ export default {
     sortByState(){
       var order = !this.sortOrderState;
       this.sortOrderState = !this.sortOrderState;
-      this.visibleTodos.sort(function (a, b) {
+      this.visibleUsers.sort(function (a, b) {
         var stateA = a.name.toUpperCase(); 
         var stateB = b.name.toUpperCase(); 
         if(order){
@@ -314,7 +314,7 @@ export default {
     sortByCountry(){
       var order = !this.sortOrderCountry;
       this.sortOrderCountry = !this.sortOrderCountry;
-      this.visibleTodos.sort(function (a, b) {
+      this.visibleUsers.sort(function (a, b) {
         var countryA = a.country.toUpperCase(); 
         var countryB = b.country.toUpperCase(); 
         if(order){
@@ -336,7 +336,7 @@ export default {
     sortByDate(){
       var order = !this.sortOrderDate;
       this.sortOrderDate = !this.sortOrderDate;
-      this.visibleTodos.sort(function (a, b) {
+      this.visibleUsers.sort(function (a, b) {
         var registeredA = a.registered; 
         var registeredB = b.registered; 
         if(order){
@@ -348,13 +348,13 @@ export default {
     },
     updatePage(pageNumber) {
       this.currentPage = pageNumber;
-      this.updateVisibleTodos();
+      this.updateVisibleUsers();
     },
-    updateVisibleTodos() {
-      this.visibleTodos = this.stateUsers.slice(this.currentPage * this.pageSize, (this.currentPage * this.pageSize) + this.pageSize);
+    updateVisibleUsers() {
+      this.visibleUsers = this.stateUsers.slice(this.currentPage * this.pageSize, (this.currentPage * this.pageSize) + this.pageSize);
 
       // if we have 0 visible todos, go back a page
-      if (this.visibleTodos.length == 0 && this.currentPage > 0) {
+      if (this.visibleUsers.length == 0 && this.currentPage > 0) {
         this.updatePage(this.currentPage -1);
       }
     },
