@@ -9,6 +9,7 @@
           <option v-bind:value="200">200 per page</option>
           <option v-bind:value="500">500 per page</option>
           <option v-bind:value="1000">1000 per page</option>
+          <option v-bind:value="5000">5000 per page</option>
         </select>
       </div><!-- mr-2 -->
       <Pagination 

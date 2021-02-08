@@ -15,6 +15,9 @@ export default {
       this.$emit('page-update', pageNumber);
     },
     totalPages() {
+      console.log(this.stateUsers);
+      console.log(this.stateUsers.length);
+      console.log(Math.ceil(this.stateUsers.length / this.pageSize));
       return Math.ceil(this.stateUsers.length / this.pageSize);
     },
     showPreviousLink() {
@@ -23,6 +26,12 @@ export default {
     showNextLink() {
       return this.currentPage == (this.totalPages() - 1) ? false : true;
     }
+  },
+  created(){
+    // console.log(this.currentPage)
+    // console.log(this.pageSize)
+    // console.log(this.updatePage(2))
+    console.log(this.totalPages());
   }
 }
 
